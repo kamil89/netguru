@@ -41,7 +41,7 @@ class NetguruGenerator < Rails::Generators::Base
   end
 
   def install_backup_mysql
-    template "backup_mysql.rake", "lib/tasks/backup.rb"
+    template "backup_mysql.rake", "lib/tasks/backup.rake"
     template "safe_mysql.rb", 'config/safe.rb'
     template "schedule_mysql.rb.erb", "config/schedule.rb"
   end
