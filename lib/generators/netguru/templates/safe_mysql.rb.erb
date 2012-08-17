@@ -1,0 +1,33 @@
+# -*- encoding : utf-8 -*-
+require 'yaml'
+safe do
+  local do
+    path "/home/<%= Netguru.application_name %>/mysqldumps/"
+  end
+
+  s3 do
+    s3_conf = YAML.load_file('config/sec_config.yml')['production']['s3']
+    key     s3_conf['access_key_id']
+    secret  s3_conf['secret_access_key']
+    bucket  '<%= Netguru.application_name %>_backup_production'
+  end
+
+  keep do
+    local 10
+    s3 60
+  end
+
+  mysqldump do
+    options "-ceKq --single-transaction --create-options"
+    db_conf = YAML.load_file('config/database.yml')['production']
+    user        db_conf['username']
+    password    db_conf['password']
+    database    db_conf['database']
+    host        'localhost'
+  end
+
+  tar do
+  end
+
+end
+

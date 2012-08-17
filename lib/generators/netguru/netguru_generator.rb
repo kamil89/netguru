@@ -40,10 +40,16 @@ class NetguruGenerator < Rails::Generators::Base
     template 'nginx.staging.conf', "config/nginx.staging.#{Netguru.application_name}.conf"
   end
 
+  def install_backup_mysql
+    template "backup_mysql.rake", "lib/tasks/backup.rb"
+    template "safe_mysql.rb", 'config/safe.rb'
+    template "schedule_mysql.rb.erb", "config/schedule.rb"
+  end
+
   def install_backup_mongo
-    template "backup.rb.erb", "config/backup.rb"
-    template "backup.rake", "lib/tasks/backup.rake"
-    template "schedule.rb.erb", "config/schedule.rb"
+    template "backup_mongo.rb.erb", "config/backup.rb"
+    template "backup_mongo.rake", "lib/tasks/backup.rake"
+    template "schedule_mongo.rb.erb", "config/schedule.rb"
   end
 
 end
