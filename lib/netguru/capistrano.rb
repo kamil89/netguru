@@ -177,7 +177,8 @@ module Netguru
           end
           #restart DJ
           task :restart_dj do
-            run "cd #{current_path}; #{runner} script/delayed_job restart"
+            set :workers, fetch(:dj_workers, 1)
+            run "cd #{current_path}; #{runner} script/delayed_job restart -n #{workers}"
           end
           #precompile assets
           task :precompile do
@@ -200,7 +201,7 @@ module Netguru
           task :review do
 
             begin
-              standup_response = JSON.parse(open("http://dashboard.netguru.pl/netguru/#{application}/commits/check.json").read)
+              standup_response = JSON.parse(open("http://dashboard.netguru.pl/projects/#{application}/commits/check.json").read)
             rescue => e
               raise "[review] Review process was not setup properly - #{e}"
             end
